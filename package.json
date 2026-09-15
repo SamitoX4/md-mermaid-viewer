@@ -1,0 +1,32 @@
+{
+  "name": "md-mermaid-viewer",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "build": "esbuild renderer/app.js --bundle --outfile=renderer/bundle.js --format=iife --platform=browser --define:process.env.NODE_ENV='\"production\"' --log-level=warning",
+    "watch": "esbuild renderer/app.js --bundle --outfile=renderer/bundle.js --format=iife --platform=browser --watch",
+    "start": "npm run build && electron .",
+    "icons": "node scripts/make-icons.mjs",
+    "desktop": "node scripts/install-desktop.mjs",
+    "dist": "npm run build && npm run icons && electron-builder && node scripts/patch-appimage.mjs"
+  },
+  "dependencies": {
+    "highlight.js": "^11.10.0",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0",
+    "mermaid": "^11.4.1"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "esbuild": "^0.24.0"
+  },
+  "build": {
+    "appId": "com.tunombre.mdmermaid",
+    "productName": "MD Mermaid Viewer",
+    "files": ["main.js", "preload.js", "renderer/**", "package.json"],
+    "win":   { "target": "nsis" },
+    "mac":   { "target": "dmg" },
+    "linux": { "target": "AppImage", "icon": "build/icons" }
+  }
+}

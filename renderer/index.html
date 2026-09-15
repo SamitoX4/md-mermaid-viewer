@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob: file:;">
+<title>MD Mermaid Viewer</title>
+<link rel="stylesheet" href="bundle.css">  <!-- generado por esbuild (tema hljs claro) -->
+<link rel="stylesheet" href="styles.css">  <!-- incluye overrides del tema oscuro -->
+</head>
+<body>
+<div class="app" id="app">
+
+  <aside id="sidebar">
+    <div class="side-head">
+      <button id="btnOpen" class="btn primary">📂 Abrir carpeta</button>
+      <input id="filter" type="search" placeholder="Filtrar archivos… (Ctrl+F)">
+    </div>
+    <nav id="tree"><div class="tree-empty">Ninguna carpeta abierta.<br>Arrastra una aquí.</div></nav>
+    <div class="side-foot"><span id="count">—</span></div>
+  </aside>
+
+  <div id="resizer"></div>
+
+  <main id="main">
+    <header id="toolbar">
+      <span id="docTitle" class="doc-title">Sin documento</span>
+      <div class="spacer"></div>
+      <label class="ctl">Tema
+        <select id="theme">
+          <option value="default">default</option>
+          <option value="neutral" selected>neutral</option>
+          <option value="base">base</option>
+          <option value="forest">forest</option>
+          <option value="dark">dark</option>
+        </select>
+      </label>
+      <label class="ctl">Papel
+        <select id="pageSize"><option>A4</option><option>A3</option><option>Letter</option><option>Legal</option></select>
+      </label>
+      <label class="ctl chk"><input type="checkbox" id="landscape"> Horizontal</label>
+      <button id="btnExportAll" class="btn">🖼 Diagramas…</button>
+      <button id="btnPDF" class="btn primary">⬇ PDF</button>
+    </header>
+
+    <article id="content" class="markdown-body">
+      <div class="empty">
+        <h1>MD + Mermaid Viewer</h1>
+        <p>Abre una carpeta con <code>.md</code> o arrástrala sobre esta ventana.</p>
+        <p class="hint">Rueda del ratón = zoom · Arrastrar = mover · Doble clic = ajustar · Esquina del lienzo = redimensionar</p>
+      </div>
+    </article>
+
+    <footer id="status"><span id="status-text">Listo</span></footer>
+  </main>
+</div>
+
+<!-- modal a pantalla completa -->
+<div id="modal" hidden>
+  <div class="modal-bar">
+    <span id="modalTitle"></span>
+    <span class="spacer"></span>
+    <button data-a="in">＋</button>
+    <button data-a="out">－</button>
+    <button data-a="fit">⤢ Ajustar</button>
+    <button data-a="svg">⬇ SVG</button>
+    <button data-a="png">⬇ PNG</button>
+    <button data-a="close" class="close">✕</button>
+  </div>
+  <div class="viewport" id="modalViewport"></div>
+</div>
+
+<script src="bundle.js"></script>
+</body>
+</html>
