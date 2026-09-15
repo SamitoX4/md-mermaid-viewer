@@ -117,6 +117,23 @@ li.hide { display: none; }
 .viewport.locked { cursor: default; }
 .viewport > svg { transform-origin: 0 0; max-width: none !important; display: block; }
 
+/* ── tema neón: brillo ("glow") en textos y formas de los diagramas ──
+   currentColor = el color de cada elemento, así cada trazo brilla con
+   su propio color. La regla se replica en NEON_GLOW_CSS (app.js) para
+   inyectarla dentro de los SVG exportados. */
+html[data-mtheme="neon"] .viewport > svg text,
+html[data-mtheme="neon"] .viewport > svg tspan {
+  filter: drop-shadow(0 0 3px currentColor) drop-shadow(0 0 7px currentColor);
+}
+html[data-mtheme="neon"] .viewport > svg path,
+html[data-mtheme="neon"] .viewport > svg rect,
+html[data-mtheme="neon"] .viewport > svg circle,
+html[data-mtheme="neon"] .viewport > svg ellipse,
+html[data-mtheme="neon"] .viewport > svg polygon,
+html[data-mtheme="neon"] .viewport > svg line {
+  filter: drop-shadow(0 0 2px currentColor);
+}
+
 /* tirador para cambiar el tamaño del lienzo (abajo a la derecha) */
 .diagram .grip { position: absolute; right: 0; bottom: 0; width: 22px; height: 22px;
                  cursor: nwse-resize; touch-action: none; z-index: 4; opacity: .5;

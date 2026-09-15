@@ -45,74 +45,141 @@ const mdi = new MarkdownIt({
 });
 
 /* ═══════════ mermaid ═══════════ */
-/* El tema "dark" de mermaid por defecto deja varios textos con bajo contraste
-   (etiquetas de aristas, actores, mensajes de secuencia…). Estas variables
-   fuerzan el contraste usando la misma paleta del modo oscuro de la app. */
-const DARK_THEME_VARS = {
-  darkMode: true,
-  background: '#1c2128',
-  primaryColor: '#21262d',
-  primaryTextColor: '#e6edf3',
-  primaryBorderColor: '#8b949e',
-  secondaryColor: '#161b22',
-  secondaryTextColor: '#e6edf3',
-  secondaryBorderColor: '#8b949e',
-  tertiaryColor: '#0d1117',
-  tertiaryTextColor: '#e6edf3',
-  tertiaryBorderColor: '#8b949e',
-  textColor: '#e6edf3',
-  nodeTextColor: '#e6edf3',
-  lineColor: '#c9d1d9',
-  edgeLabelBackground: '#161b22',
-  clusterBkg: '#161b22',
-  clusterBorder: '#8b949e',
-  clusterTextColor: '#e6edf3',
-  titleColor: '#e6edf3',
-  labelTextColor: '#e6edf3',
-  loopTextColor: '#e6edf3',
-  noteBkgColor: '#f2cc60',
-  noteTextColor: '#1f2328',
-  noteBorderColor: '#f2cc60',
-  actorTextColor: '#e6edf3',
-  actorBkg: '#21262d',
-  actorBorder: '#8b949e',
-  actorLineColor: '#8b949e',
-  signalTextColor: '#e6edf3',
-  signalColor: '#c9d1d9',
-  labelBoxBkgColor: '#21262d',
-  labelBoxBorderColor: '#8b949e',
-  activationBkgColor: '#30363d',
-  activationBorderColor: '#8b949e',
-  sequenceNumberColor: '#1f2328',
-  pie1: '#1f6feb', pie2: '#388bfd', pie3: '#3fb950', pie4: '#d29922',
-  pie5: '#f85149', pie6: '#a371f7', pie7: '#76e3ea', pie8: '#ffa657',
-  pieTitleTextColor: '#e6edf3',
-  pieSectionTextColor: '#e6edf3',
-  pieLegendTextColor: '#c9d1d9',
-  pieStrokeColor: '#0d1117',
-  pieOuterStrokeColor: '#8b949e',
-  taskBkgColor: '#21262d',
-  taskTextColor: '#e6edf3',
-  taskTextLightColor: '#e6edf3',
-  taskTextDarkColor: '#1f2328',
-  taskTextOutsideColor: '#e6edf3',
-  taskBorderColor: '#8b949e',
-  activeTaskBkgColor: '#1f6feb',
-  activeTaskBorderColor: '#388bfd',
-  sectionBkgColor: '#161b22',
-  sectionTextColor: '#e6edf3',
-  altSectionBkgColor: '#1c2128',
-  gridColor: '#30363d',
-  todayLineColor: '#f85149',
-  fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
+/* Fábrica de themeVariables a partir de una paleta compacta.
+   El tema "dark" de mermaid por defecto deja varios textos con bajo contraste
+   (etiquetas de aristas, actores, mensajes de secuencia…); estas variables
+   lo corrigen y además permiten temas personalizados (gótico, drácula…). */
+function makeVars(p) {
+  const noteText = p.noteText || '#1f2328';
+  return {
+    darkMode: !!p.dark,
+    background: p.canvas,
+    primaryColor: p.node,
+    primaryTextColor: p.text,
+    primaryBorderColor: p.border,
+    secondaryColor: p.node2,
+    secondaryTextColor: p.text,
+    secondaryBorderColor: p.border,
+    tertiaryColor: p.deep,
+    tertiaryTextColor: p.text,
+    tertiaryBorderColor: p.border,
+    textColor: p.text,
+    nodeTextColor: p.text,
+    lineColor: p.line,
+    edgeLabelBackground: p.deep,
+    clusterBkg: p.deep,
+    clusterBorder: p.border,
+    clusterTextColor: p.text,
+    titleColor: p.text,
+    labelTextColor: p.text,
+    loopTextColor: p.text,
+    noteBkgColor: p.accent,
+    noteTextColor: noteText,
+    noteBorderColor: p.accent,
+    actorTextColor: p.text,
+    actorBkg: p.node,
+    actorBorder: p.border,
+    actorLineColor: p.border,
+    signalTextColor: p.text,
+    signalColor: p.line,
+    labelBoxBkgColor: p.node,
+    labelBoxBorderColor: p.border,
+    activationBkgColor: p.node2,
+    activationBorderColor: p.border,
+    sequenceNumberColor: noteText,
+    pie1: p.pies[0], pie2: p.pies[1], pie3: p.pies[2], pie4: p.pies[3],
+    pie5: p.pies[4], pie6: p.pies[5], pie7: p.pies[6], pie8: p.pies[7],
+    pieTitleTextColor: p.text,
+    pieSectionTextColor: p.text,
+    pieLegendTextColor: p.line,
+    pieStrokeColor: p.deep,
+    pieOuterStrokeColor: p.border,
+    taskBkgColor: p.node,
+    taskTextColor: p.text,
+    taskTextLightColor: p.text,
+    taskTextDarkColor: noteText,
+    taskTextOutsideColor: p.text,
+    taskBorderColor: p.border,
+    activeTaskBkgColor: p.accent,
+    activeTaskBorderColor: p.accent,
+    sectionBkgColor: p.deep,
+    sectionTextColor: p.text,
+    altSectionBkgColor: p.canvas,
+    gridColor: p.border,
+    todayLineColor: p.accent,
+    fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
+  };
+}
+
+/* paletas personalizadas: canvas/node/node2/deep/text/line/border/accent */
+const CUSTOM_THEMES = {
+  dark: {
+    dark: true,
+    p: {
+      canvas: '#1c2128', node: '#21262d', node2: '#161b22', deep: '#0d1117',
+      text: '#e6edf3', line: '#c9d1d9', border: '#8b949e', accent: '#f2cc60',
+      pies: ['#1f6feb', '#388bfd', '#3fb950', '#d29922', '#f85149', '#a371f7', '#76e3ea', '#ffa657']
+    }
+  },
+  gotico: {
+    dark: true,
+    p: {
+      canvas: '#0e0a16', node: '#1e1430', node2: '#150e24', deep: '#080510',
+      text: '#e4d7f7', line: '#b39ddb', border: '#5e4a8a', accent: '#ffd54f',
+      pies: ['#7c4dff', '#b388ff', '#4a148c', '#651fff', '#9575cd', '#311b92', '#ffab40', '#ea80fc']
+    }
+  },
+  dracula: {
+    dark: true,
+    p: {
+      canvas: '#282a36', node: '#44475a', node2: '#343746', deep: '#21222c',
+      text: '#f8f8f2', line: '#bd93f9', border: '#6272a4', accent: '#f1fa8c',
+      pies: ['#bd93f9', '#ff79c6', '#8be9fd', '#50fa7b', '#ffb86c', '#ff5555', '#f1fa8c', '#6272a4']
+    }
+  },
+  nordico: {
+    dark: true,
+    p: {
+      canvas: '#2e3440', node: '#3b4252', node2: '#323a45', deep: '#242933',
+      text: '#eceff4', line: '#88c0d0', border: '#4c566a', accent: '#ebcb8b',
+      pies: ['#88c0d0', '#81a1c1', '#5e81ac', '#a3be8c', '#ebcb8b', '#d08770', '#bf616a', '#b48ead']
+    }
+  },
+  neon: {
+    dark: true,
+    p: {
+      canvas: '#05060f', node: '#0d1030', node2: '#090b20', deep: '#02030a',
+      text: '#d6fff9', line: '#00e5ff', border: '#7c4dff', accent: '#ff00e5',
+      pies: ['#00e5ff', '#ff00e5', '#76ff03', '#ffea00', '#ff4081', '#7c4dff', '#00ff9d', '#ff9100']
+    }
+  },
+  sepia: {
+    dark: false,
+    p: {
+      canvas: '#f5ecd7', node: '#efe3c4', node2: '#f7efdb', deep: '#e6d7b4',
+      text: '#43351f', line: '#8b6f47', border: '#b39a6b', accent: '#a3562e',
+      noteText: '#fdf6e3',
+      pies: ['#a3562e', '#8b6f47', '#5c7a4f', '#715e8a', '#b3543f', '#4f6d7a', '#937a3d', '#6b4f3a']
+    }
+  }
 };
 
+/* CSS que simula el "brillo" del tema neón; se inyecta también dentro de
+   los SVG exportados para que PNG/SVG conserven el glow. */
+const NEON_GLOW_CSS = 'text,tspan{filter:drop-shadow(0 0 3px currentColor) drop-shadow(0 0 7px currentColor);}' +
+                      'path,rect,circle,ellipse,polygon,line{filter:drop-shadow(0 0 2px currentColor);}';
+
+function isDarkTheme(name) {
+  return name === 'dark' || !!CUSTOM_THEMES[name]?.dark;
+}
+
 function initMermaid(theme = 'neutral') {
+  const custom = CUSTOM_THEMES[theme];
   mermaid.initialize({
     startOnLoad: false,
     securityLevel: 'loose',
-    theme,
-    themeVariables: theme === 'dark' ? DARK_THEME_VARS : undefined,
+    theme: custom ? 'base' : theme,
+    themeVariables: custom ? makeVars(custom.p) : undefined,
     fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
     // CLAVE para poder ampliar sin perder calidad: el SVG conserva su tamaño real
     flowchart: { useMaxWidth: false, htmlLabels: false, curve: 'basis', padding: 12 },
@@ -131,8 +198,9 @@ function initMermaid(theme = 'neutral') {
 
 /* tema claro/oscuro de toda la interfaz (el tema mermaid "dark" activa el modo oscuro) */
 function applyTheme(name) {
-  const dark = name === 'dark';
+  const dark = isDarkTheme(name);
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  document.documentElement.dataset.mtheme = name;
   try { localStorage.setItem('mdv:theme', name); } catch {}
 }
 
@@ -332,6 +400,13 @@ function svgSource(svg) {
   clone.setAttribute('width', Math.round(w));
   clone.setAttribute('height', Math.round(h));
   clone.setAttribute('viewBox', `0 0 ${Math.round(w)} ${Math.round(h)}`);
+  // el glow del tema neón vive en CSS externo; inyectarlo para que las
+  // exportaciones SVG/PNG lo conserven
+  if ($('#theme').value === 'neon') {
+    const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+    style.textContent = NEON_GLOW_CSS;
+    clone.insertBefore(style, clone.firstChild);
+  }
   return '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' +
          new XMLSerializer().serializeToString(clone);
 }
@@ -402,7 +477,7 @@ async function exportAllDiagrams(fmt = 'png') {
    Pase quirúrgico: en tema dark, cualquier texto cuyo fill calculado
    sea oscuro pasa al color claro de la paleta. */
 function fixDarkTextContrast(rootEl) {
-  if ($('#theme').value !== 'dark') return;
+  if (!isDarkTheme($('#theme').value)) return;
   const LIGHT = '#e6edf3';
   for (const t of rootEl.querySelectorAll('text, tspan')) {
     const fill = getComputedStyle(t).fill;

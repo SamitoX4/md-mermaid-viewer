@@ -174340,7 +174340,7 @@ g.stateGroup line {
       };
       genReduxSections = /* @__PURE__ */ __name((options2) => {
         const { theme } = getConfig();
-        const isDarkTheme = theme?.includes("dark");
+        const isDarkTheme2 = theme?.includes("dark");
         const isColorTheme = theme?.includes("color");
         const rawSvgId = options2.svgId?.replace(/^#/, "") ?? "";
         const scopedDropShadow = rawSvgId ? `url(#${rawSvgId}-drop-shadow)` : options2.dropShadow ?? "none";
@@ -174353,7 +174353,7 @@ g.stateGroup line {
     .section-${i2 - 1} rect,
     .section-${i2 - 1} path,
     .section-${i2 - 1} circle {
-      fill: ${isDarkTheme && isColorTheme ? options2.mainBkg : color2};
+      fill: ${isDarkTheme2 && isColorTheme ? options2.mainBkg : color2};
       stroke: ${stroke};
       stroke-width: ${options2.strokeWidth};
       filter: ${scopedDropShadow};
@@ -205423,76 +205423,171 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       return "";
     }
   });
-  var DARK_THEME_VARS = {
-    darkMode: true,
-    background: "#1c2128",
-    primaryColor: "#21262d",
-    primaryTextColor: "#e6edf3",
-    primaryBorderColor: "#8b949e",
-    secondaryColor: "#161b22",
-    secondaryTextColor: "#e6edf3",
-    secondaryBorderColor: "#8b949e",
-    tertiaryColor: "#0d1117",
-    tertiaryTextColor: "#e6edf3",
-    tertiaryBorderColor: "#8b949e",
-    textColor: "#e6edf3",
-    nodeTextColor: "#e6edf3",
-    lineColor: "#c9d1d9",
-    edgeLabelBackground: "#161b22",
-    clusterBkg: "#161b22",
-    clusterBorder: "#8b949e",
-    clusterTextColor: "#e6edf3",
-    titleColor: "#e6edf3",
-    labelTextColor: "#e6edf3",
-    loopTextColor: "#e6edf3",
-    noteBkgColor: "#f2cc60",
-    noteTextColor: "#1f2328",
-    noteBorderColor: "#f2cc60",
-    actorTextColor: "#e6edf3",
-    actorBkg: "#21262d",
-    actorBorder: "#8b949e",
-    actorLineColor: "#8b949e",
-    signalTextColor: "#e6edf3",
-    signalColor: "#c9d1d9",
-    labelBoxBkgColor: "#21262d",
-    labelBoxBorderColor: "#8b949e",
-    activationBkgColor: "#30363d",
-    activationBorderColor: "#8b949e",
-    sequenceNumberColor: "#1f2328",
-    pie1: "#1f6feb",
-    pie2: "#388bfd",
-    pie3: "#3fb950",
-    pie4: "#d29922",
-    pie5: "#f85149",
-    pie6: "#a371f7",
-    pie7: "#76e3ea",
-    pie8: "#ffa657",
-    pieTitleTextColor: "#e6edf3",
-    pieSectionTextColor: "#e6edf3",
-    pieLegendTextColor: "#c9d1d9",
-    pieStrokeColor: "#0d1117",
-    pieOuterStrokeColor: "#8b949e",
-    taskBkgColor: "#21262d",
-    taskTextColor: "#e6edf3",
-    taskTextLightColor: "#e6edf3",
-    taskTextDarkColor: "#1f2328",
-    taskTextOutsideColor: "#e6edf3",
-    taskBorderColor: "#8b949e",
-    activeTaskBkgColor: "#1f6feb",
-    activeTaskBorderColor: "#388bfd",
-    sectionBkgColor: "#161b22",
-    sectionTextColor: "#e6edf3",
-    altSectionBkgColor: "#1c2128",
-    gridColor: "#30363d",
-    todayLineColor: "#f85149",
-    fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
+  function makeVars(p3) {
+    const noteText = p3.noteText || "#1f2328";
+    return {
+      darkMode: !!p3.dark,
+      background: p3.canvas,
+      primaryColor: p3.node,
+      primaryTextColor: p3.text,
+      primaryBorderColor: p3.border,
+      secondaryColor: p3.node2,
+      secondaryTextColor: p3.text,
+      secondaryBorderColor: p3.border,
+      tertiaryColor: p3.deep,
+      tertiaryTextColor: p3.text,
+      tertiaryBorderColor: p3.border,
+      textColor: p3.text,
+      nodeTextColor: p3.text,
+      lineColor: p3.line,
+      edgeLabelBackground: p3.deep,
+      clusterBkg: p3.deep,
+      clusterBorder: p3.border,
+      clusterTextColor: p3.text,
+      titleColor: p3.text,
+      labelTextColor: p3.text,
+      loopTextColor: p3.text,
+      noteBkgColor: p3.accent,
+      noteTextColor: noteText,
+      noteBorderColor: p3.accent,
+      actorTextColor: p3.text,
+      actorBkg: p3.node,
+      actorBorder: p3.border,
+      actorLineColor: p3.border,
+      signalTextColor: p3.text,
+      signalColor: p3.line,
+      labelBoxBkgColor: p3.node,
+      labelBoxBorderColor: p3.border,
+      activationBkgColor: p3.node2,
+      activationBorderColor: p3.border,
+      sequenceNumberColor: noteText,
+      pie1: p3.pies[0],
+      pie2: p3.pies[1],
+      pie3: p3.pies[2],
+      pie4: p3.pies[3],
+      pie5: p3.pies[4],
+      pie6: p3.pies[5],
+      pie7: p3.pies[6],
+      pie8: p3.pies[7],
+      pieTitleTextColor: p3.text,
+      pieSectionTextColor: p3.text,
+      pieLegendTextColor: p3.line,
+      pieStrokeColor: p3.deep,
+      pieOuterStrokeColor: p3.border,
+      taskBkgColor: p3.node,
+      taskTextColor: p3.text,
+      taskTextLightColor: p3.text,
+      taskTextDarkColor: noteText,
+      taskTextOutsideColor: p3.text,
+      taskBorderColor: p3.border,
+      activeTaskBkgColor: p3.accent,
+      activeTaskBorderColor: p3.accent,
+      sectionBkgColor: p3.deep,
+      sectionTextColor: p3.text,
+      altSectionBkgColor: p3.canvas,
+      gridColor: p3.border,
+      todayLineColor: p3.accent,
+      fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
+    };
+  }
+  var CUSTOM_THEMES = {
+    dark: {
+      dark: true,
+      p: {
+        canvas: "#1c2128",
+        node: "#21262d",
+        node2: "#161b22",
+        deep: "#0d1117",
+        text: "#e6edf3",
+        line: "#c9d1d9",
+        border: "#8b949e",
+        accent: "#f2cc60",
+        pies: ["#1f6feb", "#388bfd", "#3fb950", "#d29922", "#f85149", "#a371f7", "#76e3ea", "#ffa657"]
+      }
+    },
+    gotico: {
+      dark: true,
+      p: {
+        canvas: "#0e0a16",
+        node: "#1e1430",
+        node2: "#150e24",
+        deep: "#080510",
+        text: "#e4d7f7",
+        line: "#b39ddb",
+        border: "#5e4a8a",
+        accent: "#ffd54f",
+        pies: ["#7c4dff", "#b388ff", "#4a148c", "#651fff", "#9575cd", "#311b92", "#ffab40", "#ea80fc"]
+      }
+    },
+    dracula: {
+      dark: true,
+      p: {
+        canvas: "#282a36",
+        node: "#44475a",
+        node2: "#343746",
+        deep: "#21222c",
+        text: "#f8f8f2",
+        line: "#bd93f9",
+        border: "#6272a4",
+        accent: "#f1fa8c",
+        pies: ["#bd93f9", "#ff79c6", "#8be9fd", "#50fa7b", "#ffb86c", "#ff5555", "#f1fa8c", "#6272a4"]
+      }
+    },
+    nordico: {
+      dark: true,
+      p: {
+        canvas: "#2e3440",
+        node: "#3b4252",
+        node2: "#323a45",
+        deep: "#242933",
+        text: "#eceff4",
+        line: "#88c0d0",
+        border: "#4c566a",
+        accent: "#ebcb8b",
+        pies: ["#88c0d0", "#81a1c1", "#5e81ac", "#a3be8c", "#ebcb8b", "#d08770", "#bf616a", "#b48ead"]
+      }
+    },
+    neon: {
+      dark: true,
+      p: {
+        canvas: "#05060f",
+        node: "#0d1030",
+        node2: "#090b20",
+        deep: "#02030a",
+        text: "#d6fff9",
+        line: "#00e5ff",
+        border: "#7c4dff",
+        accent: "#ff00e5",
+        pies: ["#00e5ff", "#ff00e5", "#76ff03", "#ffea00", "#ff4081", "#7c4dff", "#00ff9d", "#ff9100"]
+      }
+    },
+    sepia: {
+      dark: false,
+      p: {
+        canvas: "#f5ecd7",
+        node: "#efe3c4",
+        node2: "#f7efdb",
+        deep: "#e6d7b4",
+        text: "#43351f",
+        line: "#8b6f47",
+        border: "#b39a6b",
+        accent: "#a3562e",
+        noteText: "#fdf6e3",
+        pies: ["#a3562e", "#8b6f47", "#5c7a4f", "#715e8a", "#b3543f", "#4f6d7a", "#937a3d", "#6b4f3a"]
+      }
+    }
   };
+  var NEON_GLOW_CSS = "text,tspan{filter:drop-shadow(0 0 3px currentColor) drop-shadow(0 0 7px currentColor);}path,rect,circle,ellipse,polygon,line{filter:drop-shadow(0 0 2px currentColor);}";
+  function isDarkTheme(name) {
+    return name === "dark" || !!CUSTOM_THEMES[name]?.dark;
+  }
   function initMermaid(theme = "neutral") {
+    const custom9 = CUSTOM_THEMES[theme];
     mermaid_default.initialize({
       startOnLoad: false,
       securityLevel: "loose",
-      theme,
-      themeVariables: theme === "dark" ? DARK_THEME_VARS : void 0,
+      theme: custom9 ? "base" : theme,
+      themeVariables: custom9 ? makeVars(custom9.p) : void 0,
       fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
       // CLAVE para poder ampliar sin perder calidad: el SVG conserva su tamaño real
       flowchart: { useMaxWidth: false, htmlLabels: false, curve: "basis", padding: 12 },
@@ -205509,8 +205604,9 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     });
   }
   function applyTheme(name) {
-    const dark = name === "dark";
+    const dark = isDarkTheme(name);
     document.documentElement.dataset.theme = dark ? "dark" : "light";
+    document.documentElement.dataset.mtheme = name;
     try {
       localStorage.setItem("mdv:theme", name);
     } catch {
@@ -205730,6 +205826,11 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     clone8.setAttribute("width", Math.round(w4));
     clone8.setAttribute("height", Math.round(h2));
     clone8.setAttribute("viewBox", `0 0 ${Math.round(w4)} ${Math.round(h2)}`);
+    if ($4("#theme").value === "neon") {
+      const style3 = document.createElementNS("http://www.w3.org/2000/svg", "style");
+      style3.textContent = NEON_GLOW_CSS;
+      clone8.insertBefore(style3, clone8.firstChild);
+    }
     return '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' + new XMLSerializer().serializeToString(clone8);
   }
   async function svgToPng(svg2, scale3 = 3) {
@@ -205797,7 +205898,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     status(r2 ? `\u2714 ${r2.count} archivo(s) en ${r2.dir}` : "Exportaci\xF3n cancelada");
   }
   function fixDarkTextContrast(rootEl) {
-    if ($4("#theme").value !== "dark") return;
+    if (!isDarkTheme($4("#theme").value)) return;
     const LIGHT = "#e6edf3";
     for (const t4 of rootEl.querySelectorAll("text, tspan")) {
       const fill = getComputedStyle(t4).fill;
