@@ -107,6 +107,11 @@ function makeVars(p) {
     altSectionBkgColor: p.canvas,
     gridColor: p.border,
     todayLineColor: p.accent,
+    /* ER: filas alternas de las tablas de entidades; por defecto mermaid
+       las aclara desde el fondo y en temas oscuros quedan blancas sobre
+       letra clara. Se derivan de los colores de nodo de la paleta. */
+    attributeBackgroundColorOdd: p.node,
+    attributeBackgroundColorEven: p.node2,
     fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
   };
 }

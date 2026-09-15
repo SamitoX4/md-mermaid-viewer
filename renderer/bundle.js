@@ -205487,6 +205487,11 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       altSectionBkgColor: p3.canvas,
       gridColor: p3.border,
       todayLineColor: p3.accent,
+      /* ER: filas alternas de las tablas de entidades; por defecto mermaid
+         las aclara desde el fondo y en temas oscuros quedan blancas sobre
+         letra clara. Se derivan de los colores de nodo de la paleta. */
+      attributeBackgroundColorOdd: p3.node,
+      attributeBackgroundColorEven: p3.node2,
       fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
     };
   }
