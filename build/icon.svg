@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1f6feb"/>
+      <stop offset="1" stop-color="#8957e5"/>
+    </linearGradient>
+    <linearGradient id="node" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e3e9ff"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="1024" height="1024" rx="224" fill="url(#bg)"/>
+  <circle cx="512" cy="512" r="400" fill="#ffffff" opacity="0.07"/>
+
+  <!-- nodo superior -->
+  <rect x="352" y="178" width="320" height="148" rx="46" fill="url(#node)"/>
+
+  <!-- flecha hacia el rombo -->
+  <rect x="497" y="322" width="30" height="102" rx="15" fill="#ffffff"/>
+  <polygon points="512,478 466,406 558,406" fill="#ffffff"/>
+
+  <!-- rombo -->
+  <polygon points="512,452 682,586 512,720 342,586" fill="url(#node)"/>
+
+  <!-- flechas hacia los nodos inferiores -->
+  <path d="M446 656 L330 746" stroke="#ffffff" stroke-width="28" stroke-linecap="round"/>
+  <polygon points="0,0 -36,-52 36,-52" transform="translate(312 758) rotate(52)" fill="#ffffff"/>
+  <path d="M578 656 L694 746" stroke="#ffffff" stroke-width="28" stroke-linecap="round"/>
+  <polygon points="0,0 -36,-52 36,-52" transform="translate(712 758) rotate(-52)" fill="#ffffff"/>
+
+  <!-- nodos inferiores -->
+  <rect x="188" y="772" width="268" height="148" rx="48" fill="url(#node)"/>
+  <rect x="568" y="772" width="268" height="148" rx="48" fill="url(#node)"/>
+</svg>

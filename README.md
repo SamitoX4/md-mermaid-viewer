@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="build/icon.svg" width="110" alt="Icono de MD Mermaid Viewer">
+</p>
+
 # MD Mermaid Viewer
 
 Visor de escritorio para carpetas de documentación en **Markdown** con renderizado de diagramas **Mermaid**, exportación a **PDF** y a **imagen (SVG/PNG)**.

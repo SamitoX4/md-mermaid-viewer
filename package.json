@@ -1,6 +1,8 @@
 {
   "name": "md-mermaid-viewer",
   "version": "1.0.0",
+  "description": "Visor de Markdown con diagramas Mermaid (app de escritorio con Electron)",
+  "author": "SamitoX4 <samitox4@users.noreply.github.com>",
   "main": "main.js",
   "scripts": {
     "build": "esbuild renderer/app.js --bundle --outfile=renderer/bundle.js --format=iife --platform=browser --define:process.env.NODE_ENV='\"production\"' --log-level=warning",

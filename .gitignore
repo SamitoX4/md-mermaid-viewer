@@ -1,6 +1,9 @@
 node_modules/
 dist/
-build/
+build/*
+!build/icon.svg
+!build/icons/
+!build/icons/**
 .env
 *.log
 .DS_Store
