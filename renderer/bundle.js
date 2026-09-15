@@ -205454,15 +205454,34 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
   function applyPage() {
     const page = $4("#pageSize").value;
     const land = $4("#landscape").checked;
-    const [w4, h2] = PAGE_PX[page] || PAGE_PX.A4;
     const s2 = document.documentElement.style;
-    s2.setProperty("--page-w", (land ? h2 : w4) + "px");
-    s2.setProperty("--page-h", (land ? w4 : h2) + "px");
+    if (page === "stretch" || page === "fit") {
+      s2.setProperty("--page-w", "100%");
+      s2.setProperty("--page-h", "0");
+    } else {
+      const [w4, h2] = PAGE_PX[page] || PAGE_PX.A4;
+      s2.setProperty("--page-w", (land ? h2 : w4) + "px");
+      s2.setProperty("--page-h", (land ? w4 : h2) + "px");
+    }
     try {
       localStorage.setItem("mdv:pageSize", page);
       localStorage.setItem("mdv:landscape", land ? "1" : "0");
     } catch {
     }
+    applyFit();
+  }
+  function applyFit() {
+    const paper = $4("#content .paper");
+    if (!paper || paper.classList.contains("err-msg")) return;
+    if ($4("#pageSize").value !== "fit") {
+      paper.style.zoom = "";
+      return;
+    }
+    const content = $4("#content");
+    paper.style.zoom = "";
+    const availH = content.clientHeight - 32;
+    const h2 = paper.offsetHeight;
+    if (h2 > availH && availH > 0) paper.style.zoom = availH / h2;
   }
   (() => {
     let saved = "";
@@ -205803,6 +205822,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       }
     }
     status(fail ? `Listo \xB7 ${ok} correcto(s), ${fail} con error` : `Listo \xB7 ${ok} diagrama(s)`);
+    applyFit();
   }
   function decorateLinks(root4) {
     root4.querySelectorAll("a[href]").forEach((a2) => {
@@ -205852,9 +205872,11 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     if (!currentPath) return status("\u26A0 Abre un documento primero");
     status("Generando PDF\u2026");
     await sleep2(80);
+    const mode = $4("#pageSize").value;
     const out = await window.api.exportPDF({
       defaultName: slug(currentPath) + ".pdf",
-      pageSize: $4("#pageSize").value,
+      pageSize: PAGE_PX[mode] ? mode : "A4",
+      // stretch/fit no son tamaño físico: PDF en A4
       landscape: $4("#landscape").checked
     });
     status(out ? "\u2714 PDF \u2192 " + out : "Exportaci\xF3n cancelada");
@@ -205985,8 +206007,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     });
     r2.addEventListener("pointerup", () => {
       on3 = false;
-      diagrams2.forEach((d3) => {
-      });
+      applyFit();
     });
   })();
   document.addEventListener("dragover", (e3) => {
@@ -206034,6 +206055,9 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       status("\u21BB Archivo modificado, recargando\u2026");
       await openFile(p3);
     }
+  });
+  addEventListener("resize", () => {
+    applyFit();
   });
   window.api.info().then((i2) => {
     if (i2.platform === "linux") console.log("live reload recursivo puede no estar soportado");

@@ -226,7 +226,8 @@ li.hide { display: none; }
              max-width: none !important; padding: 0 !important; margin: 0 !important; }
   /* la hoja en pantalla no debe añadir márgenes al PDF (los pone printToPDF) */
   .paper { width: auto !important; min-height: 0 !important; margin: 0 !important; padding: 0 !important;
-           background: #fff !important; box-shadow: none !important; border-radius: 0 !important; }
+           background: #fff !important; box-shadow: none !important; border-radius: 0 !important;
+           zoom: 1 !important; }
   .markdown-body { max-width: none !important; }
   .viewport { height: auto !important; overflow: visible !important; background: #fff !important; }
   /* anula el transform inline del pan/zoom; !important gana a style="" */

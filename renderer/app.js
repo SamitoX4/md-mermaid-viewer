@@ -73,18 +73,39 @@ function applyTheme(name) {
   try { localStorage.setItem('mdv:theme', name); } catch {}
 }
 
-/* vista de hoja: Papel + Horizontal también cambian la vista, no solo el PDF */
+/* vista de hoja: Papel + Horizontal también cambian la vista, no solo el PDF.
+   Los modos stretch/fit usan ancho completo; fit además escala la hoja
+   para que el documento entero quepa en la ventana (stretch V y H). */
 function applyPage() {
   const page = $('#pageSize').value;
   const land = $('#landscape').checked;
-  const [w, h] = PAGE_PX[page] || PAGE_PX.A4;
   const s = document.documentElement.style;
-  s.setProperty('--page-w', (land ? h : w) + 'px');
-  s.setProperty('--page-h', (land ? w : h) + 'px');
+  if (page === 'stretch' || page === 'fit') {
+    s.setProperty('--page-w', '100%');
+    s.setProperty('--page-h', '0');
+  } else {
+    const [w, h] = PAGE_PX[page] || PAGE_PX.A4;
+    s.setProperty('--page-w', (land ? h : w) + 'px');
+    s.setProperty('--page-h', (land ? w : h) + 'px');
+  }
   try {
     localStorage.setItem('mdv:pageSize', page);
     localStorage.setItem('mdv:landscape', land ? '1' : '0');
   } catch {}
+  applyFit();
+}
+
+/* ⤢ Ajustar a ventana: zoom para que todo el documento sea visible
+   sin scrollbars (solo encoge; nunca amplía). */
+function applyFit() {
+  const paper = $('#content .paper');
+  if (!paper || paper.classList.contains('err-msg')) return;
+  if ($('#pageSize').value !== 'fit') { paper.style.zoom = ''; return; }
+  const content = $('#content');
+  paper.style.zoom = '';                       // mide la altura natural
+  const availH = content.clientHeight - 32;    // padding 24 + margen 8
+  const h = paper.offsetHeight;
+  if (h > availH && availH > 0) paper.style.zoom = availH / h;
 }
 
 (() => {
@@ -429,6 +450,7 @@ async function renderMarkdown(text) {
     }
   }
   status(fail ? `Listo · ${ok} correcto(s), ${fail} con error` : `Listo · ${ok} diagrama(s)`);
+  applyFit();
 }
 
 function decorateLinks(root) {
@@ -478,9 +500,10 @@ async function exportPDF() {
   if (!currentPath) return status('⚠ Abre un documento primero');
   status('Generando PDF…');
   await sleep(80);                       // deja asentar el layout tras el @media print
+  const mode = $('#pageSize').value;
   const out = await window.api.exportPDF({
     defaultName: slug(currentPath) + '.pdf',
-    pageSize : $('#pageSize').value,
+    pageSize : PAGE_PX[mode] ? mode : 'A4',   // stretch/fit no son tamaño físico: PDF en A4
     landscape: $('#landscape').checked
   });
   status(out ? '✔ PDF → ' + out : 'Exportación cancelada');
@@ -595,7 +618,7 @@ $('#landscape').onchange = applyPage;
   let on = false;
   r.addEventListener('pointerdown', e => { on = true; r.setPointerCapture(e.pointerId); });
   r.addEventListener('pointermove', e => { if (on) sb.style.width = Math.max(160, e.clientX) + 'px'; });
-  r.addEventListener('pointerup', () => { on = false; diagrams.forEach(d => {}); });
+  r.addEventListener('pointerup', () => { on = false; applyFit(); });
 })();
 
 // drag & drop de carpeta
@@ -632,6 +655,9 @@ window.api.onFileChanged(async p => {
   if (!res.error) { renderTree(res.tree); $('#count').textContent = `${res.fileCount} archivo(s) · ${res.root}`; markActive(currentPath); }
   if (p === currentPath) { status('↻ Archivo modificado, recargando…'); await openFile(p); }
 });
+
+// reajustar el zoom de "Ajustar a ventana" al cambiar el tamaño de la ventana
+addEventListener('resize', () => { applyFit(); });
 
 window.api.info().then(i => { if (i.platform === 'linux') console.log('live reload recursivo puede no estar soportado'); });
 
