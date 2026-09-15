@@ -205796,6 +205796,20 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
     const r2 = await window.api.exportMany(files);
     status(r2 ? `\u2714 ${r2.count} archivo(s) en ${r2.dir}` : "Exportaci\xF3n cancelada");
   }
+  function fixDarkTextContrast(rootEl) {
+    if ($4("#theme").value !== "dark") return;
+    const LIGHT = "#e6edf3";
+    for (const t4 of rootEl.querySelectorAll("text, tspan")) {
+      const fill = getComputedStyle(t4).fill;
+      const m3 = fill && fill.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+      if (!m3) {
+        t4.setAttribute("fill", LIGHT);
+        continue;
+      }
+      const [, r2, g2, b3] = m3.map(Number);
+      if (0.299 * r2 + 0.587 * g2 + 0.114 * b3 < 80) t4.setAttribute("fill", LIGHT);
+    }
+  }
   async function absolutize(html2, baseDir) {
     const rels2 = /* @__PURE__ */ new Set();
     const re3 = /\b(?:src|href)="([^"]+)"/g;
@@ -205841,6 +205855,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         applyViewportSize(vp, viewportSizes[viewportKey(n2)]);
         vp.innerHTML = svg2;
         const svgEl = vp.firstElementChild;
+        fixDarkTextContrast(svgEl);
         const bar = document.createElement("div");
         bar.className = "toolbar";
         bar.innerHTML = `<span class="tag">${esc(kind)}</span><button data-a="in"   title="Acercar">\uFF0B</button><button data-a="out"  title="Alejar">\uFF0D</button><button data-a="fit"  title="Ajustar (doble clic)">\u2922</button><button data-a="full" title="Pantalla completa">\u26F6</button><button data-a="lock" title="Bloquear interacci\xF3n">\u{1F513}</button><button data-a="svg"  title="Exportar SVG">SVG</button><button data-a="png"  title="Exportar PNG 3\xD7">PNG</button>`;

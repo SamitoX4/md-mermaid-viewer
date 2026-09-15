@@ -397,6 +397,23 @@ async function exportAllDiagrams(fmt = 'png') {
 }
 
 /* ═══════════ render ═══════════ */
+/* Aun con themeVariables, algunos diagramas (o texto suelto con color
+   propio del .md) quedan con fill oscuro sobre el fondo oscuro.
+   Pase quirúrgico: en tema dark, cualquier texto cuyo fill calculado
+   sea oscuro pasa al color claro de la paleta. */
+function fixDarkTextContrast(rootEl) {
+  if ($('#theme').value !== 'dark') return;
+  const LIGHT = '#e6edf3';
+  for (const t of rootEl.querySelectorAll('text, tspan')) {
+    const fill = getComputedStyle(t).fill;
+    const m = fill && fill.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+    if (!m) { t.setAttribute('fill', LIGHT); continue; }
+    const [, r, g, b] = m.map(Number);
+    // luminancia percibida; por debajo del umbral = "negro" sobre fondo oscuro
+    if (0.299 * r + 0.587 * g + 0.114 * b < 80) t.setAttribute('fill', LIGHT);
+  }
+}
+
 async function absolutize(html, baseDir) {
   const rels = new Set();
   const re = /\b(?:src|href)="([^"]+)"/g;
@@ -449,6 +466,7 @@ async function renderMarkdown(text) {
       applyViewportSize(vp, viewportSizes[viewportKey(n)]);
       vp.innerHTML = svg;
       const svgEl = vp.firstElementChild;
+      fixDarkTextContrast(svgEl);
 
       const bar = document.createElement('div');
       bar.className = 'toolbar';
