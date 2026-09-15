@@ -107,11 +107,12 @@ function makeVars(p) {
     altSectionBkgColor: p.canvas,
     gridColor: p.border,
     todayLineColor: p.accent,
-    /* ER: filas alternas de las tablas de entidades; por defecto mermaid
-       las aclara desde el fondo y en temas oscuros quedan blancas sobre
-       letra clara. Se derivan de los colores de nodo de la paleta. */
-    attributeBackgroundColorOdd: p.node,
-    attributeBackgroundColorEven: p.node2,
+    /* filas de las tablas de entidades ER: con theme 'base' mermaid las
+       calcula aclarando primaryColor (~blanco) y la letra clara se pierde.
+       (las variables attributeBackgroundColor* son huérfanas: nadie las
+       consume en mermaid 11.17 — el renderer ER usa rowOdd/rowEven) */
+    rowOdd: p.node,
+    rowEven: p.node2,
     fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
   };
 }
@@ -154,7 +155,7 @@ const CUSTOM_THEMES = {
     dark: true,
     p: {
       canvas: '#05060f', node: '#0d1030', node2: '#090b20', deep: '#02030a',
-      text: '#d6fff9', line: '#00e5ff', border: '#7c4dff', accent: '#ff00e5',
+      text: '#ffffff', line: '#00e5ff', border: '#7c4dff', accent: '#ff00e5',
       pies: ['#00e5ff', '#ff00e5', '#76ff03', '#ffea00', '#ff4081', '#7c4dff', '#00ff9d', '#ff9100']
     }
   },

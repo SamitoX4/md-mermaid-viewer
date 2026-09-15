@@ -205487,11 +205487,12 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
       altSectionBkgColor: p3.canvas,
       gridColor: p3.border,
       todayLineColor: p3.accent,
-      /* ER: filas alternas de las tablas de entidades; por defecto mermaid
-         las aclara desde el fondo y en temas oscuros quedan blancas sobre
-         letra clara. Se derivan de los colores de nodo de la paleta. */
-      attributeBackgroundColorOdd: p3.node,
-      attributeBackgroundColorEven: p3.node2,
+      /* filas de las tablas de entidades ER: con theme 'base' mermaid las
+         calcula aclarando primaryColor (~blanco) y la letra clara se pierde.
+         (las variables attributeBackgroundColor* son huérfanas: nadie las
+         consume en mermaid 11.17 — el renderer ER usa rowOdd/rowEven) */
+      rowOdd: p3.node,
+      rowEven: p3.node2,
       fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
     };
   }
@@ -205559,7 +205560,7 @@ ${prefix}${Math.round(value2 * 100) / 100}${suffix}`;
         node: "#0d1030",
         node2: "#090b20",
         deep: "#02030a",
-        text: "#d6fff9",
+        text: "#ffffff",
         line: "#00e5ff",
         border: "#7c4dff",
         accent: "#ff00e5",
